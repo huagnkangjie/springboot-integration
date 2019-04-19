@@ -1,0 +1,95 @@
+test:
+  name: huangkangjie
+
+
+#服务端口
+server:
+  port: 9528
+  #springboot2.0 配置写法
+#  servlet:
+#    context-path: /springboot
+  context-path: /springboot
+  #tomcat连接数
+  tomcat:
+    accept-count: 500
+    max-connections: 10000
+    max-threads: 800
+#日志
+logging:
+  config: classpath:log4j2-dev.xml
+#  config: classpath:logback.xml
+
+swagger:
+  show: true
+
+#mapper
+mapper:
+  mappers:
+    - com.kabasiji.springboot.mapper
+  not-empty: true
+  identity: MYSQL
+#MyBatis helper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
+
+#spring配置
+spring:
+  application: springboot
+  datasource:
+  #普通的jdbc连接
+#    url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+    url: jdbc:log4jdbc:mysql://127.0.0.1:3306/test?useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: 123456
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    tomcat:
+      validation-query: SELECT 1
+      test-while-idle: true
+      time-between-eviction-runs-millis: 288000
+      #连接池同一时间可分配的最大活跃连接数
+      max-active: 100
+      #最大空闲连接数
+      max-idle: 5
+      #初始化连接数
+      initial-size: 5
+#    driver-class-name: com.mysql.jdbc.Driver
+  #redis
+  redis:
+    database: 3
+    password: goodsogood
+    host: 172.16.30.33
+    port: 6379
+  messages:
+    basename: messages
+    encoding: UTF-8
+  data:
+    elasticsearch:
+        cluster-name: my-application
+        cluster-nodes: 127.0.0.1:9300
+        local: true
+        repositories:
+          enable: true
+    mongodb:
+      uri: mongodb://localhost:27017/test
+  mvc:
+    view:
+      prefix: /WEB-INF/pages/
+      suffix: .jsp
+
+
+#swagger配置
+#swagger:
+#  title: SpringBoot Test
+#  description: SpringBoot学习
+#  version: 0.1
+#  license: Apache License, Version 2.0
+#  licenseUrl: https://www.apache.org/licenses/LICENSE-2.0.html
+#  termsOfServiceUrl: www.baidu.com
+#  base-package: com.kabasiji.springboot
+#  ui-config:
+#    show-request-headers: true
+#  global-operation-parameters:
+#    - {name: _tk, description: token, modelRef: string, parameterType: header, required: false}

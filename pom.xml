@@ -15,6 +15,7 @@
         <module>2-jsp</module>
         <module>3-elasticsearch</module>
         <module>4-mulit-datasource</module>
+        <module>5-sharding-shpere</module>
     </modules>
 
     <name>springboot</name>

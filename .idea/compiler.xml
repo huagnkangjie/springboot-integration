@@ -10,6 +10,7 @@
         <module name="2-jsp" />
         <module name="3-elasticsearch" />
         <module name="4-mulit-datasource" />
+        <module name="5-sharding-shpere" />
       </profile>
     </annotationProcessing>
   </component>

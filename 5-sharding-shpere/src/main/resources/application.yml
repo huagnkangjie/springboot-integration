@@ -1,0 +1,160 @@
+test:
+  name: huangkangjie
+
+
+#服务端口
+server:
+  port: 9528
+  #springboot2.0 配置写法
+#  servlet:
+#    context-path: /springboot
+  context-path: /springboot
+  #tomcat连接数
+  tomcat:
+    accept-count: 500
+    max-connections: 10000
+    max-threads: 800
+#日志
+logging:
+  config: classpath:log4j2-dev.xml
+#  config: classpath:logback.xml
+
+swagger:
+  show: true
+
+#mapper
+#mapper:
+#  mappers:
+#    - com.kabasiji.springboot.mapper
+#  not-empty: true
+#  identity: MYSQL
+#MyBatis helper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
+
+#spring配置
+#spring:
+#  application: springboot
+#  datasource-type: org.apache.tomcat.jdbc.pool.DataSource
+#  datasource:
+#    names: ds0
+#  #普通的jdbc连接
+##    url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+#    url: jdbc:log4jdbc:mysql://127.0.0.1:3306/test?useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+#    username: root
+#    password: 123456
+#    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    tomcat:
+#      validation-query: SELECT 1
+#      test-while-idle: true
+#      time-between-eviction-runs-millis: 288000
+#      #连接池同一时间可分配的最大活跃连接数
+#      max-active: 100
+#      #最大空闲连接数
+#      max-idle: 5
+#      #初始化连接数
+#      initial-size: 5
+##    driver-class-name: com.mysql.jdbc.Driver
+#  #多数据源
+#  second-datasource:
+#    name: ds1
+#    url: jdbc:log4jdbc:mysql://127.0.0.1:3306/biz?useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+#    username: root
+#    password: 123456
+#    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    tomcat:
+#      validation-query: SELECT 1
+#      test-while-idle: true
+#      time-between-eviction-runs-millis: 288000
+#      #连接池同一时间可分配的最大活跃连接数
+#      max-active: 100
+#      #最大空闲连接数
+#      max-idle: 5
+#      #初始化连接数
+#      initial-size: 5
+#redis
+#  redis:
+#    database: 3
+#    password: goodsogood
+#    host: 172.16.30.33
+#    port: 6379
+#  messages:
+#    basename: messages
+#    encoding: UTF-8
+#  data:
+#    elasticsearch:
+#        cluster-name: my-application
+#        cluster-nodes: 127.0.0.1:9300
+#        local: true
+#        repositories:
+#          enable: true
+#    mongodb:
+#      uri: mongodb://localhost:27017/test
+
+
+sharding: #sharding.jdbc
+  jdbc:
+    datasource:
+      names: ds0
+      ds0: #datasource ds0的连接配置
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        url: jdbc:log4jdbc:mysql://127.0.0.1/test?useSSL=false&useUnicode=true&zeroDateTimeBehavior=convertToNull
+        username: root
+        password: 123456
+        hikari:
+              connection-test-query: SELECT 1 FROM DUAL
+              minimum-idle: 5
+              maximum-pool-size: 10
+              pool-name: hikari-jdbc-pool
+              idle-timeout: 30000
+              max-lifetime: 2000000
+              connection-timeout: 30000
+              register-mbeans: true
+    datasource1:
+      names: ds1
+      ds1: #datasource ds0的连接配置
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+        url: jdbc:log4jdbc:mysql://127.0.0.1/biz?useSSL=false&useUnicode=true&zeroDateTimeBehavior=convertToNull
+        username: root
+        password: 123456
+        hikari:
+              connection-test-query: SELECT 1 FROM DUAL
+              minimum-idle: 5
+              maximum-pool-size: 10
+              pool-name: hikari-jdbc-pool
+              idle-timeout: 30000
+              max-lifetime: 2000000
+              connection-timeout: 30000
+              register-mbeans: true
+    config:
+      sharding:
+        default-key-generator-class-name: io.shardingsphere.plugin.keygen.IPKeyGenerator
+        tables:
+          t_user:
+            key-generator-column-name: user_id #user_id使用默认自增长，不配置key-generator-class-name表示使用默认的自增长类
+            actual-data-nodes: ds0.t_user_$->{0..1} #分表（2张表）
+            table-strategy:
+              inline:
+                sharding-column: user_id #用主键分表
+                algorithm-expression: t_user_$->{user_id % 2} #分表策略，等分
+#            key-generator-column-name:  test_user_id
+
+
+#swagger配置
+#swagger:
+#  title: SpringBoot Test
+#  description: SpringBoot学习
+#  version: 0.1
+#  license: Apache License, Version 2.0
+#  licenseUrl: https://www.apache.org/licenses/LICENSE-2.0.html
+#  termsOfServiceUrl: www.baidu.com
+#  base-package: com.kabasiji.springboot
+#  ui-config:
+#    show-request-headers: true
+#  global-operation-parameters:
+#    - {name: _tk, description: token, modelRef: string, parameterType: header, required: false}
